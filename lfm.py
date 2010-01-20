@@ -26,8 +26,7 @@ if __name__ == "__main__":
     opts.add_option("-r","--recommendations",action="append")
     (options, args) = opts.parse_args()
 
-    mpd.connect('slartibartfass','6600')
-    mpd.password('hallo123')
+    mpd.connect('localhost','6600')
 
     for values in vars(options).iteritems():
             add_to_mpd(values[0],values[1])
