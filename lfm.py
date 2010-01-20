@@ -20,10 +20,10 @@ def add_to_mpd(type,station):
 
 if __name__ == "__main__":
     opts = OptionParser()
-    opts.add_option("-a","--artist",action="append")
-    opts.add_option("-u","--user",action="append")
-    opts.add_option("-t","--globaltags",action="append")
-    opts.add_option("-r","--recommendations",action="append")
+    opts.add_option("-a","--artist",action="append",help="Comma separated list of artists")
+    opts.add_option("-u","--user",action="append",help="Comma separated list of users")
+    opts.add_option("-t","--globaltags",action="append",help="Comma separated list of tags")
+    opts.add_option("-r","--recommendations",action="append",help="Comma separated list of users")
     (options, args) = opts.parse_args()
 
     mpd.connect('localhost','6600')
