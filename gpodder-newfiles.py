@@ -1,27 +1,15 @@
 #!/usr/bin/python
-import mpd
-from time import sleep
+from time import sleep,strftime
+import mpdext
 
-def files_in_dir(mpd,dir):
-    files = set()
-    for i in mpd.listall(dir):
-        try:
-            files.add(i[file])
-        except KeyError:
-            pass
-    return files
-
-mpd = mpd.MPDClient()
+mpd = mpdext.MPDClientExt()
 mpd.connect('localhost','6600')
 
-oldfiles = files_in_dir(mpd,'Podcasts')
+oldfiles = mpd.files_in_dir('Podcasts')
 
 mpd.update('Podcasts')
-mpd.clear()
-if 'updating_db' in mpd.status().keys():
+while 'updating_db' in mpd.status().keys():
     sleep(2)
 
-newfiles = files_in_dir(mpd,'Podcasts')
-
-for file in newfiles.difference(oldfiles):
-    mpd.add(file)
+newfiles = mpd.files_in_dir('Podcasts')
+mpd.save_playlist(newfiles.difference(oldfiles),strftime("%Y-%m-%d-%H-%M"))
