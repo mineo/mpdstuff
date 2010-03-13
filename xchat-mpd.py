@@ -18,7 +18,7 @@ def announce_cb(word, word_eol, userdata):
 	try:
 		song = client.currentsong()
 	except mpd.ConnectionError,e:
-		xchat.prnt("Connection error",e)
+		xchat.prnt("Connection error"+e)
 		""" Well, now follows the part which you have to customize for \
 			a different output """
 	album = song["album"]
@@ -28,7 +28,7 @@ def announce_cb(word, word_eol, userdata):
 		% (channel,artist,title,album))
 	return xchat.EAT_ALL
 
-def unload_cb(word,word_eol,userdata):
+def unload_cb(userdata):
 	global client
 	client.disconnect()
 
