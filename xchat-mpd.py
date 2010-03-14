@@ -19,9 +19,10 @@ def announce_cb(word, word_eol, userdata):
 		song = client.currentsong()
 	except mpd.ConnectionError,e:
 		xchat.prnt("Connection error"+e)
-		""" Well, now follows the part which you have to customize for \
-			a different output """
+		return xchat.EAT_ALL
 	album = song["album"]
+	""" Well, now follows the part which you have to customize for \
+		a different output """
 	title = song["title"]
 	artist = song["artist"]
 	xchat.command("msg %s np: %s - %s [%s]" \
