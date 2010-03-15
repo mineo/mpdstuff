@@ -2,6 +2,7 @@ __module_name__ ="MPD announcer"
 __module_version__ = "0.1"
 __module_decription__ = "Well, displays MPD info in a channel. \
 		Customizable by editing the script"
+__module_author__ = "Wieland Hoffmann <themineo@gmail.com>"
 
 import xchat
 from os import getenv
@@ -28,7 +29,7 @@ def announce_cb(word, word_eol, userdata):
 	try:
 		song = client.currentsong()
 	except mpd.ConnectionError,e:
-		xchat.prnt("Connection error"+e)
+		xchat.prnt("Connection error %s" % e)
 		return xchat.EAT_ALL
 	album = song["album"]
 	""" Well, now follows the part which you have to customize for \
@@ -36,7 +37,7 @@ def announce_cb(word, word_eol, userdata):
 	title = song["title"]
 	artist = song["artist"]
 	xchat.command("msg %s np: %s - %s [%s]" \
-		% (channel,artist,title,album))
+		% (channel, artist, title, album))
 	return xchat.EAT_ALL
 
 def unload_cb(userdata):
