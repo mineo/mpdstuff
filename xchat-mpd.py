@@ -4,13 +4,23 @@ __module_decription__ = "Well, displays MPD info in a channel. \
 		Customizable by editing the script"
 
 import xchat
+from os import getenv
+
+""" Set up the basic stuff """
 try:
 	import mpd
 except:
 	xchat.prnt("Couldn't load the mpd module")
 
+mpd_host = getenv("MPD_HOST","localhost")
+mpd_port = getenv("MPD_PORT","6600")
+""" put your password here """
+mpd_pass = None
+
 client = mpd.MPDClient()
-client.connect("localhost",6600)
+client.connect(mpd_host,mpd_port)
+if mpd_pass:
+	client.password(mpd_pass)
 
 def announce_cb(word, word_eol, userdata):
 	global client
