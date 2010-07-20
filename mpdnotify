@@ -12,7 +12,7 @@ try:
 except ImportError:
     print "python-notify module not found"
 
-if os.fork() != 0:
+if os.fork() == 0:
     m = mpd.MPDClient()
     m.connect("localhost", 6600)
     status = m.status()["state"]
