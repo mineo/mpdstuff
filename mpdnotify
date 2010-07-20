@@ -27,10 +27,10 @@ if os.fork() != 0:
                     "by <b>%s</b>" % m.currentsong()["artist"])
             n.show()
 
-        if m.status()["state"] != status:
+        if tempstate != status:
             n = pynotify.Notification("MPD: %s" % tempstate,
                     "was: %s" % status)
             n.show()
-            status = tempstate
+        status = tempstate
 else:
     exit(0)
