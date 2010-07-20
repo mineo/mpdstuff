@@ -8,30 +8,23 @@ try:
 	import mpd
 except:
 	xchat.prnt("Couldn't load the mpd module")
-
 client = mpd.MPDClient()
-client.connect("localhost",6600)
-
 def announce_cb(word, word_eol, userdata):
 	global client
+	client.connect("localhost","6600")
 	channel = xchat.get_info("channel")
 	try:
 		song = client.currentsong()
 	except mpd.ConnectionError,e:
 		xchat.prnt("Connection error"+e)
-		""" Well, now follows the part which you have to customize for \
-			a different output """
-	album = song["album"]
-	title = song["title"]
-	artist = song["artist"]
-	xchat.command("msg %s np: %s - %s [%s]" \
-		% (channel,artist,title,album))
+	else:
+		album = song["album"]
+		title = song["title"]
+		artist = song["artist"]
+		xchat.command("msg %s np: %s - %s [%s]" \
+			% (channel,artist,title,album))
+		client.disconnect()
 	return xchat.EAT_ALL
 
-def unload_cb(userdata):
-	global client
-	client.disconnect()
 
-
-xchat.hook_unload(unload_cb)
 xchat.hook_command("np",announce_cb)
