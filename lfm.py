@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # Allows to load lastfm:// playlists in mpd 
 # for usage just check the optionParser options
-# 
+#
 # Feel free to redistribute
 
 from optparse import OptionParser
@@ -13,10 +13,16 @@ def add_to_mpd(type,station):
         for i in station[0].split(','):
             if type in ['artist','user','globaltags']:
                 print 'adding lastfm://'+type+'/'+i.replace(' ','+')
-                mpd.load('lastfm://'+type+'/'+i.replace(' ','+'))
+                try:
+                    mpd.load('lastfm://'+type+'/'+i.replace(' ','+'))
+                except:
+                    pass
             else:
                 print 'adding lastfm://user/'+i+'/recommendations'
-                mpd.load('lastfm://user/'+i+'/recommendations')
+                try:
+                    mpd.load('lastfm://user/'+i+'/recommendations')
+                except:
+                    pass
 
 if __name__ == "__main__":
     opts = OptionParser()
