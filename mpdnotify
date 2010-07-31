@@ -21,10 +21,12 @@ if os.fork() == 0:
     while True:
         m.idle("player")
         tempstate = m.status()["state"]
+        song = m.currentsong()
 
         if tempstate == "play":
-            n = pynotify.Notification(m.currentsong()["title"],
-                    "by <b>%s</b>" % m.currentsong()["artist"])
+            n = pynotify.Notification(song["title"],
+                    "by <b>%s</b>\non <b>%s</b>" % (song["artist"],
+                        song["album"]))
             n.show()
 
         if tempstate != status:
