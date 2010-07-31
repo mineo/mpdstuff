@@ -22,11 +22,15 @@ if os.fork() == 0:
         m.idle("player")
         tempstate = m.status()["state"]
         song = m.currentsong()
+        for tag in ("album", "artist","title"):
+            if not tag in song.keys():
+                song[tag] = "Unknown %s" % tag
 
         if tempstate == "play":
             n = pynotify.Notification(song["title"],
-                    "by <b>%s</b>\non <b>%s</b>" % (song["artist"],
-                        song["album"]))
+                    "by <b>%s</b>\non <b>%s</b>" % 
+                    (song["artist"],
+                     song["album"]))
             n.show()
 
         if tempstate != status:
