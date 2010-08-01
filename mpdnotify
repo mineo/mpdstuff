@@ -36,7 +36,6 @@ if os.fork() == 0:
         if tempstate != status:
             n = pynotify.Notification("MPD: <b>%s</b>" % tempstate,
                     "was: <b>%s</b>" % status)
-            n.set_timeout(3)
             n.show()
         status = tempstate
 else:
