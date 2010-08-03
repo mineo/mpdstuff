@@ -15,7 +15,9 @@ except ImportError:
 
 if os.fork() == 0:
     m = mpd.MPDClient()
-    m.connect("localhost", 6600)
+    MPD_HOST = os.getenv("MPD_HOST","localhost")
+    MPD_PORT = os.getenv("MPD_PORT",6600)
+    m.connect(MPD_HOST, MPD_PORT)
     status = m.status()["state"]
     pynotify.init("MPD")
 
