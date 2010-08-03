@@ -1,0 +1,67 @@
+#!/usr/bin/python
+"""
+MPDT(hingie) allows you to love and tag tracks on last.fm via command line.
+Options:
+    -tt, --titletag tag1:tag2:...
+        Tag the currently playing song in mpd with tag1, tag2 and so on.
+        Tags are separated by colons, not spaces!
+        "Awesome tag" is one(!) tag
+    -l, --love
+        Love the currently playing song in mpd
+    -h, --help
+        Show this message
+"""
+import pylast
+import os
+import sys
+import mpd
+
+CONF_FILE = os.path.join(os.getenv("XDG_CONFIG_HOME"),"mpdt","config")
+MPD_HOST = os.getenv("MPD_HOST") or "localhost"
+MPD_PORT = os.getenv("MPD_PORT") or 6600
+
+def read_auth():
+    conf = {}
+    with open(CONF_FILE,"r") as configfile:
+        for i in configfile.readlines():
+            i = i.split(" ")
+            conf[i[0]] = i[1][:-1]
+    return conf
+
+if __name__ == "__main__":
+    if "-h" in sys.argv or "--help" in sys.argv:
+        print __doc__
+        exit(0)
+
+    conf = read_auth()
+    try:
+        network = pylast.get_lastfm_network(api_key = conf["api_key"],
+            api_secret = conf["api_secret"], username = conf["username"],
+            password_hash = conf["password"])
+    except KeyError:
+        sys.exit("Please check your config")
+
+    m = mpd.MPDClient()
+    m.connect(MPD_HOST, MPD_PORT)
+    song = m.currentsong()
+
+    if "-l" in sys.argv or "--love" in sys.argv:
+        try:
+            track = network.get_track(song["artist"], song["title"])
+            track.love()
+            try:
+                sys.argv.remove("-l")
+                sys.argv.remove("--love")
+            except ValueError:
+                pass
+        except KeyError:
+            sys.exit("Songs tags are not correctly set")
+
+    if "-tt" in sys.argv or "--titletag" in sys.argv:
+        try:
+            track = network.get_track(song["artist"], song["title"])
+            tags = " ".join(sys.argv[2:]).split(":")
+            for tag in tags:
+                track.add_tags(tag)
+        except KeyError:
+            sys.exit("Songs tags are not correctly set")

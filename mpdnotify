@@ -1,0 +1,45 @@
+#!/usr/bin/python
+import os
+import sys
+try:
+    import mpd
+except ImportError:
+    print "python-mpd module not found"
+    print "It's available at:"
+    print "http://jatreuman.indefero.net/p/python-mpd/"
+
+try:
+    import pynotify
+except ImportError:
+    print "python-notify module not found"
+
+if os.fork() == 0:
+    m = mpd.MPDClient()
+    m.connect("localhost", 6600)
+    status = m.status()["state"]
+    pynotify.init("MPD")
+
+    while True:
+        m.idle("player")
+        tempstate = m.status()["state"]
+        song = m.currentsong()
+
+        for tag in ("album", "artist","title"):
+            if not tag in song.keys():
+                song[tag] = "Unknown %s" % tag
+
+        if tempstate == "play":
+            n = pynotify.Notification(song["title"],
+                    "by <b>%s</b>\non <b>%s</b>" % 
+                    (song["artist"],
+                     song["album"]))
+            n.show()
+
+        if "-s" in sys.argv:
+            if tempstate != status:
+                n = pynotify.Notification("MPD: <b>%s</b>" % tempstate,
+                        "was: <b>%s</b>" % status)
+                n.show()
+        status = tempstate
+else:
+    exit(0)
