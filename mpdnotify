@@ -39,7 +39,7 @@ if os.fork() == 0:
 
         if "-s" in sys.argv:
             if tempstate != status:
-                n = pynotify.Notification("MPD: <b>%s</b>" % tempstate,
+                n = pynotify.Notification("MPD: %s" % tempstate,
                         "was: <b>%s</b>" % status)
                 n.show()
         status = tempstate
