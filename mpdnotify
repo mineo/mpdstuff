@@ -13,6 +13,8 @@ try:
 except ImportError:
     print "python-notify module not found"
 
+MAX_SUMMARY_LENGTH = 39
+
 if os.fork() == 0:
     m = mpd.MPDClient()
     MPD_HOST = os.getenv("MPD_HOST","localhost")
@@ -29,6 +31,9 @@ if os.fork() == 0:
         for tag in ("album", "artist","title"):
             if not tag in song.keys():
                 song[tag] = "Unknown %s" % tag
+
+        if len(song["title"]) >= MAX_SUMMARY_LENGTH:
+            song["title"] = "".join([song["title"][:MAX_SUMMARY_LENGTH-3],"..."])
 
         if tempstate == "play":
             n = pynotify.Notification(song["title"],
