@@ -60,8 +60,13 @@ if __name__ == "__main__":
     if "-tt" in sys.argv or "--titletag" in sys.argv:
         try:
             track = network.get_track(song["artist"], song["title"])
-            tags = " ".join(sys.argv[2:]).split(":")
-            for tag in tags:
-                track.add_tags(tag)
+            track.add_tags(*(" ".join(sys.argv[2:]).split(":")))
         except KeyError:
             sys.exit("Songs tags are not correctly set")
+
+    if "-at" in sys.argv or "--artisttag" in sys.argv:
+        try:
+            artist = network.get_artist(song["artist"])
+            artist.add_tags(*(" ".join(sys.argv[2:]).split(":")))
+        except KeyError:
+            sys.exit("Song tags are not correctly set")
