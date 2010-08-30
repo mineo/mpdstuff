@@ -1,8 +1,10 @@
 #!/usr/bin/env python
-# Allows to load lastfm:// playlists in mpd 
-# for usage just check the optionParser options
-#
-# Feel free to redistribute
+"""
+Allows to load lastfm:// playlists in mpd 
+for usage just check the optionParser options
+
+Feel free to redistribute
+"""
 
 from optparse import OptionParser
 import mpd
