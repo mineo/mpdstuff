@@ -49,7 +49,7 @@ if __name__ == "__main__":
     m.connect(MPD_HOST, MPD_PORT)
     song = m.currentsong()
 
-    for key in song.keys():
+    for key in ["artist", "title", "album"]:
         song[key] = _unicode(song[key])
 
     if "-l" in sys.argv or "--love" in sys.argv:
