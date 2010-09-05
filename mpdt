@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python2
 """
 MPDT(hingie) allows you to love and tag tracks on last.fm via command line.
 Options:
@@ -28,8 +28,12 @@ def read_auth():
             conf[i[0]] = i[1][:-1]
     return conf
 
+def _unicode(text):
+    if type(text) != unicode:
+        return unicode(text, "utf-8")
+
 if __name__ == "__main__":
-    if "-h" in sys.argv or "--help" in sys.argv:
+    if "-h" in sys.argv or "--help" in sys.argv or len(sys.argv) == 1:
         print __doc__
         exit(0)
 
@@ -44,6 +48,9 @@ if __name__ == "__main__":
     m = mpd.MPDClient()
     m.connect(MPD_HOST, MPD_PORT)
     song = m.currentsong()
+
+    for key in ["artist", "title", "album"]:
+        song[key] = _unicode(song[key])
 
     if "-l" in sys.argv or "--love" in sys.argv:
         try:
@@ -60,8 +67,13 @@ if __name__ == "__main__":
     if "-tt" in sys.argv or "--titletag" in sys.argv:
         try:
             track = network.get_track(song["artist"], song["title"])
-            tags = " ".join(sys.argv[2:]).split(":")
-            for tag in tags:
-                track.add_tags(tag)
+            track.add_tags(*(" ".join(sys.argv[2:]).split(":")))
         except KeyError:
             sys.exit("Songs tags are not correctly set")
+
+    if "-at" in sys.argv or "--artisttag" in sys.argv:
+        try:
+            artist = network.get_artist(song["artist"])
+            artist.add_tags(*(" ".join(sys.argv[2:]).split(":")))
+        except KeyError:
+            sys.exit("Song tags are not correctly set")
