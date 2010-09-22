@@ -6,6 +6,8 @@ Options:
         Tag the currently playing song in mpd with tag1, tag2 and so on.
         Tags are separated by colons, not spaces!
         "Awesome tag" is one(!) tag
+    -at, --artisttag tag1:tag2:...
+        Same as -tt but for artists
     -l, --love
         Love the currently playing song in mpd
     -h, --help
