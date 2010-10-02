@@ -7,6 +7,7 @@ Feel free to redistribute
 """
 
 from optparse import OptionParser
+import os
 import mpd
 mpd = mpd.MPDClient()
 
@@ -34,7 +35,10 @@ if __name__ == "__main__":
     opts.add_option("-r","--recommendations",action="append",help="Comma separated list of users")
     (options, args) = opts.parse_args()
 
-    mpd.connect('localhost','6600')
+    host = os.getenv("MPD_HOST","localhost")
+    port = os.getenv("MPD_POT",6600)
+
+    mpd.connect(host,port)
 
     for values in vars(options).iteritems():
             add_to_mpd(values[0],values[1])
