@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/python2
 """
 Allows to load lastfm:// playlists in mpd 
 for usage just check the optionParser options
