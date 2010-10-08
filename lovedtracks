@@ -1,0 +1,31 @@
+#!/usr/bin/python2
+import mpdext
+import sys
+import os
+import pylast
+
+def add_track_to_playlist(mpd, track):
+    pass
+
+def read_config(filename=os.path.join(
+    os.getenv("XDG_CONFIG_HOME"),"mpdt/config"
+    )):
+    config = {}
+    with open(filename,"r") as _file:
+        for line in _file.readlines():
+            _line = line.split()
+            config[_line[0]] = _line[1]
+    return config
+
+if __name__ == "__main__":
+    config = read_config()
+    network = pylast.get_lastfm_network(
+            api_key=config["api_key"],
+            api_secret=config["api_secret"]
+            )
+    mpd = mpdext.MPDClientExt()
+    mpd.connect_via_env()
+    user = network.get_user(sys.argv[1])
+    lt = user.get_loved_tracks(limit=None)
+    for track in pylast.extract_items(lt):
+        add_track_to_playlist(mpd, track)
