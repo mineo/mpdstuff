@@ -39,13 +39,15 @@ if os.fork() == 0:
             n = pynotify.Notification(song["title"],
                     "by <b>%s</b>\non <b>%s</b>" % 
                     (song["artist"],
-                     song["album"]))
+                     song["album"]),
+                    "notification-audio-next")
             n.show()
 
         if "-s" in sys.argv:
             if tempstate != status:
                 n = pynotify.Notification("MPD: %s" % tempstate,
-                        "was: <b>%s</b>" % status)
+                        "was: <b>%s</b>" % status,"notification-audio-%s" %
+                        tempstate)
                 n.show()
         status = tempstate
 else:
