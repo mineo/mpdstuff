@@ -77,13 +77,13 @@ if __name__ == "__main__":
     if options.titletag is not None:
         try:
             track = network.get_track(song["artist"], song["title"])
-            track.add_tags(*(" ".join(options.titletag).split(":")))
+            track.add_tags(*(options.titletag.split(":")))
         except KeyError:
             sys.exit("Songs tags are not correctly set")
 
     if options.artisttag is not None:
         try:
             artist = network.get_artist(song["artist"])
-            artist.add_tags(*(" ".join(options.artisttag).split(":")))
+            artist.add_tags(*(options.artisttag.split(":")))
         except KeyError:
             sys.exit("Song tags are not correctly set")
