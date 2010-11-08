@@ -2,11 +2,11 @@
 """
 MPDT(hingie) allows you to love and tag tracks on last.fm via command line.
 Options:
-    -tt, --titletag tag1:tag2:...
+    -t, --titletag tag1:tag2:...
         Tag the currently playing song in mpd with tag1, tag2 and so on.
         Tags are separated by colons, not spaces!
         "Awesome tag" is one(!) tag
-    -at, --artisttag tag1:tag2:...
+    -a, --artisttag tag1:tag2:...
         Same as -tt but for artists
     -l, --love
         Love the currently playing song in mpd
@@ -17,6 +17,7 @@ import pylast
 import os
 import sys
 import mpd
+from optparse import OptionParser
 
 CONF_FILE = os.path.join(os.getenv("XDG_CONFIG_HOME"),"mpdt","config")
 MPD_HOST = os.getenv("MPD_HOST","localhost")
@@ -47,6 +48,11 @@ if __name__ == "__main__":
     except KeyError:
         sys.exit("Please check your config")
 
+    parser = OptionParser()
+    parser.add_option("-l","--love",action="store_true")
+    parser.add_option("-a","--artisttag",dest="artisttag")
+    parser.add_option("-t","--titletag",dest="titletag")
+
     m = mpd.MPDClient()
     m.connect(MPD_HOST, MPD_PORT)
     song = m.currentsong()
@@ -54,7 +60,9 @@ if __name__ == "__main__":
     for key in ["artist", "title", "album"]:
         song[key] = _unicode(song[key])
 
-    if "-l" in sys.argv or "--love" in sys.argv:
+    (options,args) = parser.parse_args()
+
+    if options.love:
         try:
             track = network.get_track(song["artist"], song["title"])
             track.love()
@@ -66,16 +74,16 @@ if __name__ == "__main__":
         except KeyError:
             sys.exit("Songs tags are not correctly set")
 
-    if "-tt" in sys.argv or "--titletag" in sys.argv:
+    if options.titletag is not None:
         try:
             track = network.get_track(song["artist"], song["title"])
-            track.add_tags(*(" ".join(sys.argv[2:]).split(":")))
+            track.add_tags(*(" ".join(options.titletag).split(":")))
         except KeyError:
             sys.exit("Songs tags are not correctly set")
 
-    if "-at" in sys.argv or "--artisttag" in sys.argv:
+    if options.artisttag is not None:
         try:
             artist = network.get_artist(song["artist"])
-            artist.add_tags(*(" ".join(sys.argv[2:]).split(":")))
+            artist.add_tags(*(" ".join(options.artisttag).split(":")))
         except KeyError:
             sys.exit("Song tags are not correctly set")
