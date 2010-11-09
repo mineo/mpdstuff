@@ -2,16 +2,24 @@
 """
 MPDT(hingie) allows you to love and tag tracks on last.fm via command line.
 Options:
-    -t, --titletag tag1:tag2:...
+    -t, --titletag tag1:tag2:
         Tag the currently playing song in mpd with tag1, tag2 and so on.
         Tags are separated by colons, not spaces!
         "Awesome tag" is one(!) tag
-    -a, --artisttag tag1:tag2:...
+    -a, --artisttag tag1:tag2:
         Same as -tt but for artists
     -l, --love
         Love the currently playing song in mpd
     -h, --help
         Show this message
+
+You will need a config file in "$XDG_CONFIG_HOME/mpdt/config" with the
+following content:
+    api_key your_api_key
+    api_secret your_api_secret
+    username your_lastfm_username
+    password your_lastfm_password_hash
+        (generate it with "echo -n password|md5sum)
 """
 import pylast
 import os
