@@ -18,7 +18,7 @@ mpdnotify
 ---------
 Simple notification daemon displaying a pop-up on track change.
 Use -s to also get a pop-up on state changes (playing, paused, stopped)
-Need the pynotify module to work
+Needs the pynotify module to work
 
 ------------
 gpodder-play
