@@ -16,7 +16,7 @@ mpd = mpd.MPDClient()
 
 def add_to_mpd(type, station, count=1):
     for i in station.split(','):
-        if type in ['artist', 'user', 'globaltags']:
+        if type in ['artist', 'user', 'globaltags', 'genre']:
             print 'adding lastfm://' + type + '/' + i.replace(' ', '+')
             for _ in xrange(count):
                 try:
@@ -43,6 +43,8 @@ if __name__ == "__main__":
                     help="Comma separated list of tags")
     opts.add_option("-r", "--recommendations", default=None,
                     help="Comma separated list of users")
+    opts.add_option("-g", "--genre", default=None
+                    help="Comma separated list of genres")
     opts.add_option("-c", "--count", default=1,
                     help="Number of times to add the lastfm:// url")
     (options, args) = opts.parse_args()
