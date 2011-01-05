@@ -43,7 +43,7 @@ if __name__ == "__main__":
                     help="Comma separated list of tags")
     opts.add_option("-r", "--recommendations", default=None,
                     help="Comma separated list of users")
-    opts.add_option("-g", "--genre", default=None
+    opts.add_option("-g", "--genre", default=None,
                     help="Comma separated list of genres")
     opts.add_option("-c", "--count", default=1,
                     help="Number of times to add the lastfm:// url")
@@ -56,4 +56,5 @@ if __name__ == "__main__":
 
     for values in vars(options).iteritems():
         if values[1] is not None:
-            add_to_mpd(values[0], values[1], int(options.count))
+            if values[0] != "count":
+                add_to_mpd(values[0], values[1], int(options.count))
