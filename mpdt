@@ -25,46 +25,29 @@ import pylast
 import os
 import sys
 import mpd
+
+from common import connect_to_lastfm, connect_to_mpd
 from optparse import OptionParser
-
-CONF_FILE = os.path.join(os.getenv("XDG_CONFIG_HOME"),"mpdt","config")
-MPD_HOST = os.getenv("MPD_HOST","localhost")
-MPD_PORT = os.getenv("MPD_PORT",6600)
-
-def read_auth():
-    conf = {}
-    with open(CONF_FILE,"r") as configfile:
-        for i in configfile.readlines():
-            i = i.split(" ")
-            conf[i[0]] = i[1][:-1]
-    return conf
 
 def _unicode(text):
     if type(text) != unicode:
         return unicode(text, "utf-8")
 
 if __name__ == "__main__":
-    conf = read_auth()
-    try:
-        network = pylast.get_lastfm_network(api_key = conf["api_key"],
-            api_secret = conf["api_secret"], username = conf["username"],
-            password_hash = conf["password"])
-    except KeyError:
-        sys.exit("Please check your config")
-
     parser = OptionParser()
     parser.add_option("-l","--love",action="store_true")
     parser.add_option("-a","--artisttag",dest="artisttag")
     parser.add_option("-t","--titletag",dest="titletag")
 
-    m = mpd.MPDClient()
-    m.connect(MPD_HOST, MPD_PORT)
+    m = connect_to_mpd()
     song = m.currentsong()
 
     for key in ["artist", "title", "album"]:
         song[key] = _unicode(song[key])
 
     (options,args) = parser.parse_args()
+
+    network = connect_to_lastfm()
 
     if options.love:
         try:
