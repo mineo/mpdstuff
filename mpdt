@@ -19,7 +19,7 @@ following content:
     api_secret your_api_secret
     username your_lastfm_username
     password your_lastfm_password_hash
-        (generate it with "echo -n password|md5sum)
+        (generate it with "echo -n password|md5sum")
 """
 import pylast
 import os
