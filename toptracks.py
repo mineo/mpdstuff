@@ -1,9 +1,6 @@
 #!/usr/bin/env python2
-import logging
-import pylast
 import sys
 
-from os import getenv
 from common import connect_to_mpd, connect_to_lastfm
 
 def main():
