@@ -14,7 +14,7 @@ def connect_to_mpd():
     host = getenv("MPD_HOST", "localhost")
     if "@" in host:
         password, host = host.split("@")
-    port = getenv("MPD_POT", 6600)
+    port = getenv("MPD_PORT", 6600)
 
     client.connect(host, port)
     if password is not None:
