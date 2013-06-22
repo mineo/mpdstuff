@@ -1,7 +1,7 @@
 import mpd
 import pylast
 from os import getenv
-from os.path import join
+from os.path import join, expanduser
 
 def connect_to_mpd():
     """Connects to an MPD server via MPD_HOST and MPD_PORT environment
@@ -23,7 +23,7 @@ def connect_to_mpd():
     return client
 
 def connect_to_lastfm():
-    CONF_FILE = join(getenv("XDG_CONFIG_HOME"),"mpdt","config")
+    CONF_FILE = join(getenv("XDG_CONFIG_HOME", expanduser("~/.config")),"mpdt","config")
     conf = {}
     with open(CONF_FILE,"r") as configfile:
         for i in configfile.readlines():
